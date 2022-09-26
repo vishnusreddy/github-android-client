@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">GPulls - A Minimal Mobile Client for GitHub</string>
+    <string name="github_username">GitHub Username</string>
+    <string name="submit">SUBMIT</string>
+    <string name="wrong_username">Please Enter a Valid Username</string>
+    <string name="proceeding">Proceeding...</string>
+</resources>
