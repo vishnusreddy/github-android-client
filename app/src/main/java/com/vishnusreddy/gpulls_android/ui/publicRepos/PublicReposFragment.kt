@@ -14,6 +14,7 @@ import com.vishnusreddy.gpulls_android.R
 import com.vishnusreddy.gpulls_android.data.model.GithubRepository
 import com.vishnusreddy.gpulls_android.databinding.FragmentPublicReposBinding
 import com.vishnusreddy.gpulls_android.ui.closedPullRequests.ClosedPullRequestsFragment
+import com.vishnusreddy.gpulls_android.ui.common.LoaderStateAdapter
 import kotlinx.coroutines.launch
 
 class PublicReposFragment : Fragment() {
@@ -22,6 +23,7 @@ class PublicReposFragment : Fragment() {
 
     private val viewModel by lazy { ViewModelProvider(requireActivity())[PublicReposViewModel::class.java] }
     private lateinit var adapter: PublicReposAdapter
+    private lateinit var loaderStateAdapter: LoaderStateAdapter
     private lateinit var userName: String
 
 
@@ -63,6 +65,7 @@ class PublicReposFragment : Fragment() {
                 }
             }
         )
+        loaderStateAdapter = LoaderStateAdapter { adapter.retry() }
         arguments?.let {
             userName = it.getString(USERNAME, "")
         }
@@ -85,6 +88,7 @@ class PublicReposFragment : Fragment() {
     private fun setupViews() {
         binding.reposRecyclerView.layoutManager = LinearLayoutManager(requireContext())
         binding.reposRecyclerView.adapter = adapter
+        binding.reposRecyclerView.adapter = adapter.withLoadStateFooter(loaderStateAdapter)
     }
 
     private fun showSnackbar(message: Int) {

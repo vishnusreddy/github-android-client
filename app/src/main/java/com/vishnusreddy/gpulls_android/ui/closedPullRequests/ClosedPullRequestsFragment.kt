@@ -13,6 +13,7 @@ import com.vishnusreddy.gpulls_android.R
 import com.vishnusreddy.gpulls_android.data.model.GithubPullRequest
 import com.vishnusreddy.gpulls_android.data.model.GithubRepository
 import com.vishnusreddy.gpulls_android.databinding.FragmentClosedPullRequestsBinding
+import com.vishnusreddy.gpulls_android.ui.common.LoaderStateAdapter
 import com.vishnusreddy.gpulls_android.ui.publicRepos.PublicReposAdapter
 import com.vishnusreddy.gpulls_android.ui.publicRepos.PublicReposFragment
 import com.vishnusreddy.gpulls_android.ui.publicRepos.PublicReposViewModel
@@ -23,6 +24,7 @@ class ClosedPullRequestsFragment : Fragment() {
     lateinit var binding: FragmentClosedPullRequestsBinding
     private val viewModel by lazy { ViewModelProvider(requireActivity())[ClosedPullRequestsViewModel::class.java] }
     private lateinit var adapter: ClosedPullRequestsAdapter
+    private lateinit var loaderStateAdapter: LoaderStateAdapter
     private lateinit var userName: String
     private lateinit var repoName: String
 
@@ -58,6 +60,7 @@ class ClosedPullRequestsFragment : Fragment() {
 
     private fun init() {
         adapter = ClosedPullRequestsAdapter(requireContext())
+        loaderStateAdapter = LoaderStateAdapter { adapter.retry() }
         arguments?.let {
             userName = it.getString(USERNAME, "")
             repoName = it.getString(REPO_NAME, "")
@@ -77,6 +80,7 @@ class ClosedPullRequestsFragment : Fragment() {
     private fun setupViews() {
         binding.prRecyclerView.layoutManager = LinearLayoutManager(requireContext())
         binding.prRecyclerView.adapter = adapter
+        binding.prRecyclerView.adapter = adapter.withLoadStateFooter(loaderStateAdapter)
     }
 
 }
