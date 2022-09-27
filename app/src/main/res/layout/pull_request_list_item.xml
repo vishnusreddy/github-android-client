@@ -4,7 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_margin="8dp">
+    android:layout_margin="6dp"
+    app:cardCornerRadius="12dp">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -24,7 +25,8 @@
             android:id="@+id/pr_username"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:textColor="@color/colorPrimary"
+            android:textStyle="bold"
+            android:textColor="@color/black"
             android:layout_marginStart="8dp"
             android:textSize="16sp"
             app:layout_constraintLeft_toRightOf="@id/pr_user_image"
@@ -49,7 +51,7 @@
             android:layout_height="wrap_content"
             android:layout_margin="8dp"
             android:textStyle="bold"
-            android:textSize="20sp"
+            android:textSize="16sp"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toBottomOf="@id/pr_user_image"
@@ -61,7 +63,7 @@
             android:layout_height="24dp"
             android:layout_margin="8dp"
             android:contentDescription="created_on"
-            android:src="@drawable/ic_code"
+            android:src="@drawable/ic_create"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintTop_toBottomOf="@id/pr_title" />
@@ -74,7 +76,8 @@
             app:layout_constraintBottom_toBottomOf="@id/created_on_image"
             app:layout_constraintLeft_toRightOf="@id/created_on_image"
             app:layout_constraintTop_toTopOf="@id/created_on_image"
-            tools:text="20-2-2000" />
+            android:maxLength="10"
+            tools:text="20-02-2000" />
 
         <ImageView
             android:id="@+id/closed_on_image"
@@ -82,7 +85,7 @@
             android:layout_height="24dp"
             android:layout_margin="8dp"
             android:contentDescription="closed_on"
-            android:src="@drawable/ic_eye"
+            android:src="@drawable/ic_tick"
             app:layout_constraintBottom_toBottomOf="@id/created_on_image"
             app:layout_constraintHorizontal_chainStyle="packed"
             app:layout_constraintRight_toLeftOf="@id/closed_on_textview"
@@ -96,6 +99,7 @@
             app:layout_constraintBottom_toBottomOf="@id/closed_on_image"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="@id/created_on_image"
+            android:maxLength="10"
             tools:text="10-12-2000" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>

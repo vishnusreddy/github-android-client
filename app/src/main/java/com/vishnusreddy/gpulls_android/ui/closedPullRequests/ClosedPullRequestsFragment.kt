@@ -57,7 +57,7 @@ class ClosedPullRequestsFragment : Fragment() {
     }
 
     private fun init() {
-        adapter = ClosedPullRequestsAdapter()
+        adapter = ClosedPullRequestsAdapter(requireContext())
         arguments?.let {
             userName = it.getString(USERNAME, "")
             repoName = it.getString(REPO_NAME, "")
