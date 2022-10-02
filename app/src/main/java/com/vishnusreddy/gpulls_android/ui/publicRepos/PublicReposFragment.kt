@@ -15,6 +15,7 @@ import com.vishnusreddy.gpulls_android.data.model.GithubRepository
 import com.vishnusreddy.gpulls_android.databinding.FragmentPublicReposBinding
 import com.vishnusreddy.gpulls_android.ui.closedPullRequests.ClosedPullRequestsFragment
 import com.vishnusreddy.gpulls_android.ui.common.LoaderStateAdapter
+import com.vishnusreddy.gpulls_android.utils.ui.UIUtils
 import kotlinx.coroutines.launch
 
 class PublicReposFragment : Fragment() {
@@ -72,16 +73,23 @@ class PublicReposFragment : Fragment() {
     }
 
     private fun goToClosedPrFragment(userName: String, name: String) {
-        this.parentFragmentManager.beginTransaction().add(R.id.fragmentContainerMain, ClosedPullRequestsFragment.newInstance(userName, name)).addToBackStack(null).commit()
+        this.parentFragmentManager
+            .beginTransaction()
+            .add(R.id.fragmentContainerMain, ClosedPullRequestsFragment.newInstance(userName, name))
+            .addToBackStack(null)
+            .commit()
     }
 
     private fun setObservers() {
-        if (!userName.isNullOrEmpty()) {
+        if (userName.isNotEmpty()) {
             viewModel.fetchPublicReposLiveData(userName).observe(viewLifecycleOwner) {
+                binding.progressBar.visibility = View.GONE
                 lifecycleScope.launch {
                     adapter.submitData(it)
                 }
             }
+        } else {
+            UIUtils.showSnackbar(binding.root, R.string.issue_processing_request_please_try_again)
         }
     }
 
@@ -91,9 +99,6 @@ class PublicReposFragment : Fragment() {
         binding.reposRecyclerView.adapter = adapter.withLoadStateFooter(loaderStateAdapter)
     }
 
-    private fun showSnackbar(message: Int) {
-        Snackbar.make(binding.root, message, Snackbar.LENGTH_SHORT)
-            .show()
-    }
+
 
 }

@@ -37,28 +37,23 @@ class LoginFragment : Fragment() {
         viewModel.userNameValidLiveDate.observe(viewLifecycleOwner) {
             it?.let {
                 if (it) {
-                    showSnackbar(R.string.proceeding)
+                    UIUtils.showSnackbar(binding.root,R.string.proceeding)
                     this.parentFragmentManager.beginTransaction()
                         .add(R.id.fragmentContainerMain, PublicReposFragment.newInstance(username))
                         .addToBackStack(null).commit()
                 } else {
-                    showSnackbar(R.string.wrong_username)
+                    UIUtils.showSnackbar(binding.root, R.string.wrong_username)
                 }
             }
         }
     }
 
-    private fun showSnackbar(message: Int) {
-        Snackbar.make(binding.root, message, Snackbar.LENGTH_SHORT)
-            .show()
-    }
-
     private fun setListeners() {
         binding.submitButton.setOnClickListener {
-            UIUtils().hideKeyboard(activity)
+            UIUtils.hideKeyboard(activity)
             username = binding.etUsername.text.toString()
             if (username.isNullOrEmpty()) {
-                showSnackbar(R.string.wrong_username)
+                UIUtils.showSnackbar(binding.root,R.string.wrong_username)
             } else {
                 viewModel.checkIfUserExists(username)
             }
