@@ -13,12 +13,8 @@ import com.bumptech.glide.Glide
 import com.vishnusreddy.gpulls_android.R
 import com.vishnusreddy.gpulls_android.data.model.GithubPullRequest
 
-class ClosedPullRequestsAdapter(val context: Context) :
+class ClosedPullRequestsAdapter(private val context: Context) :
     PagingDataAdapter<GithubPullRequest, RecyclerView.ViewHolder>(REPO_COMPARATOR) {
-
-    interface ItemClickListener {
-        fun onItemClicked(repo: GithubPullRequest)
-    }
 
     companion object {
         private val REPO_COMPARATOR = object : DiffUtil.ItemCallback<GithubPullRequest>() {

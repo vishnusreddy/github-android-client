@@ -6,7 +6,9 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.isVisible
 import androidx.lifecycle.lifecycleScope
+import androidx.paging.LoadState
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.snackbar.Snackbar
 import com.vishnusreddy.gpulls_android.R
@@ -17,6 +19,7 @@ import com.vishnusreddy.gpulls_android.ui.common.LoaderStateAdapter
 import com.vishnusreddy.gpulls_android.ui.publicRepos.PublicReposAdapter
 import com.vishnusreddy.gpulls_android.ui.publicRepos.PublicReposFragment
 import com.vishnusreddy.gpulls_android.ui.publicRepos.PublicReposViewModel
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
 class ClosedPullRequestsFragment : Fragment() {
@@ -69,10 +72,16 @@ class ClosedPullRequestsFragment : Fragment() {
 
     private fun setObservers() {
         if (userName.isNotEmpty()) {
-            viewModel.fetchClosedReposLiveData(userName, repoName).observe(viewLifecycleOwner) {
+            viewModel.fetchClosedPullRequestsLiveData(userName, repoName).observe(viewLifecycleOwner) {
                 lifecycleScope.launch {
                     adapter.submitData(it)
                 }
+            }
+        }
+
+        viewLifecycleOwner.lifecycleScope.launch {
+            adapter.loadStateFlow.collectLatest {
+                binding.progressBar.isVisible = it.refresh is LoadState.Loading
             }
         }
     }

@@ -7,7 +7,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.core.view.isVisible
 import androidx.lifecycle.lifecycleScope
+import androidx.paging.LoadState
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.snackbar.Snackbar
 import com.vishnusreddy.gpulls_android.R
@@ -16,12 +18,12 @@ import com.vishnusreddy.gpulls_android.databinding.FragmentPublicReposBinding
 import com.vishnusreddy.gpulls_android.ui.closedPullRequests.ClosedPullRequestsFragment
 import com.vishnusreddy.gpulls_android.ui.common.LoaderStateAdapter
 import com.vishnusreddy.gpulls_android.utils.ui.UIUtils
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
 class PublicReposFragment : Fragment() {
 
     lateinit var binding: FragmentPublicReposBinding
-
     private val viewModel by lazy { ViewModelProvider(requireActivity())[PublicReposViewModel::class.java] }
     private lateinit var adapter: PublicReposAdapter
     private lateinit var loaderStateAdapter: LoaderStateAdapter
@@ -83,13 +85,16 @@ class PublicReposFragment : Fragment() {
     private fun setObservers() {
         if (userName.isNotEmpty()) {
             viewModel.fetchPublicReposLiveData(userName).observe(viewLifecycleOwner) {
-                binding.progressBar.visibility = View.GONE
                 lifecycleScope.launch {
                     adapter.submitData(it)
                 }
             }
-        } else {
-            UIUtils.showSnackbar(binding.root, R.string.issue_processing_request_please_try_again)
+        }
+
+        viewLifecycleOwner.lifecycleScope.launch {
+            adapter.loadStateFlow.collectLatest {
+                binding.progressBar.isVisible = it.refresh is LoadState.Loading
+            }
         }
     }
 
@@ -98,7 +103,4 @@ class PublicReposFragment : Fragment() {
         binding.reposRecyclerView.adapter = adapter
         binding.reposRecyclerView.adapter = adapter.withLoadStateFooter(loaderStateAdapter)
     }
-
-
-
 }

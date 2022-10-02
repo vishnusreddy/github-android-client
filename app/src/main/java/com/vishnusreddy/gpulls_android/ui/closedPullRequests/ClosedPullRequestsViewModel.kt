@@ -15,7 +15,7 @@ import com.vishnusreddy.gpulls_android.utils.network.NetworkTools
 class ClosedPullRequestsViewModel : ViewModel() {
     private val repository: AppNetworkRepository = AppNetworkRepository(NetworkTools.githubAPI)
 
-    fun fetchClosedReposLiveData(userName: String, repoName: String): LiveData<PagingData<GithubPullRequest>> {
+    fun fetchClosedPullRequestsLiveData(userName: String, repoName: String): LiveData<PagingData<GithubPullRequest>> {
         return repository.getClosedPullRequestsLiveData(userName, repoName)
             .map { pagingData -> pagingData.map { it } }
             .cachedIn(viewModelScope)
