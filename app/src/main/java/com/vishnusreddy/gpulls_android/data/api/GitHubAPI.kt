@@ -3,7 +3,6 @@ package com.vishnusreddy.gpulls_android.data.api
 import com.vishnusreddy.gpulls_android.data.model.GithubPullRequest
 import com.vishnusreddy.gpulls_android.data.model.GithubRepository
 import com.vishnusreddy.gpulls_android.data.model.GithubUser
-import retrofit2.Call
 import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.Path

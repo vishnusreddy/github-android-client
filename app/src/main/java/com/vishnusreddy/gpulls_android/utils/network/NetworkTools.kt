@@ -25,8 +25,5 @@ object NetworkTools {
             .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
             .build()
     }
-
-    // List all API Interfaces Over Here
-    // 1. API Interface for GitHub
     val githubAPI: GitHubAPI = getRetrofit().create(GitHubAPI::class.java)
 }

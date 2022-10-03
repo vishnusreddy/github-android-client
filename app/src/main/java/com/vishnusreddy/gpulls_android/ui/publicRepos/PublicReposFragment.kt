@@ -20,6 +20,7 @@ import com.vishnusreddy.gpulls_android.ui.common.LoaderStateAdapter
 import com.vishnusreddy.gpulls_android.utils.ui.UIUtils
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
+import okio.IOException
 
 class PublicReposFragment : Fragment() {
 
@@ -94,6 +95,27 @@ class PublicReposFragment : Fragment() {
         viewLifecycleOwner.lifecycleScope.launch {
             adapter.loadStateFlow.collectLatest {
                 binding.progressBar.isVisible = it.refresh is LoadState.Loading
+            }
+        }
+
+        viewLifecycleOwner.lifecycleScope.launch {
+            adapter.addLoadStateListener { loadState ->
+                val errorState = when {
+                    loadState.prepend is LoadState.Error -> loadState.prepend as LoadState.Error
+                    loadState.append is LoadState.Error -> loadState.append as LoadState.Error
+                    loadState.refresh is LoadState.Error -> loadState.refresh as LoadState.Error
+                    else -> null
+                }
+
+                if (loadState.append.endOfPaginationReached) {
+                    if (adapter.itemCount < 1) {
+                        binding.emptyImageView.visibility = View.VISIBLE
+                    } else {
+                        binding.emptyImageView.visibility = View.GONE
+                    }
+                } else if (errorState?.error is IOException) {
+                    UIUtils.showSnackbar(binding.root, R.string.please_check_your_internet_and_try_again)
+                }
             }
         }
     }

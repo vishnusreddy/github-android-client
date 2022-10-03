@@ -7,7 +7,7 @@ import com.vishnusreddy.gpulls_android.data.model.GithubRepository
 import retrofit2.HttpException
 import java.io.IOException
 
-class GitHubRepoPagingSource(private val gitHubAPI: GitHubAPI, private val userName: String):
+class GitHubRepoPagingSource(private val gitHubAPI: GitHubAPI, private val userName: String) :
     PagingSource<Int, GithubRepository>() {
 
     private val DEFAULT_PAGE_INDEX = 1

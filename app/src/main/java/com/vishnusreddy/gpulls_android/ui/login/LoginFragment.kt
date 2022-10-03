@@ -37,13 +37,18 @@ class LoginFragment : Fragment() {
         viewModel.userNameValidLiveDate.observe(viewLifecycleOwner) {
             it?.let {
                 if (it) {
-                    UIUtils.showSnackbar(binding.root,R.string.proceeding)
                     this.parentFragmentManager.beginTransaction()
                         .add(R.id.fragmentContainerMain, PublicReposFragment.newInstance(username))
                         .addToBackStack(null).commit()
                 } else {
                     UIUtils.showSnackbar(binding.root, R.string.wrong_username)
                 }
+            }
+        }
+
+        viewModel.showMessageInSnackbar.observe(viewLifecycleOwner) {
+            it.let {
+                UIUtils.showSnackbar(binding.root, it)
             }
         }
     }

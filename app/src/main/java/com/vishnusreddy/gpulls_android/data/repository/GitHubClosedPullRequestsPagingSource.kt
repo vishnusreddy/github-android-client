@@ -10,8 +10,8 @@ import java.io.IOException
 class GitHubClosedPullRequestsPagingSource(
     private val gitHubAPI: GitHubAPI,
     private val userName: String,
-    private val repoName: String):
-    PagingSource<Int, GithubPullRequest>() {
+    private val repoName: String
+) : PagingSource<Int, GithubPullRequest>() {
 
     private val DEFAULT_PAGE_INDEX = 1
     private val STATE_CLOSED = "closed"
@@ -23,7 +23,8 @@ class GitHubClosedPullRequestsPagingSource(
     override suspend fun load(params: LoadParams<Int>): LoadResult<Int, GithubPullRequest> {
         val page = params.key ?: DEFAULT_PAGE_INDEX
         return try {
-            val response = gitHubAPI.getClosedPRs(userName, repoName, page, params.loadSize, STATE_CLOSED)
+            val response =
+                gitHubAPI.getClosedPRs(userName, repoName, page, params.loadSize, STATE_CLOSED)
             LoadResult.Page(
                 response, prevKey = if (page == DEFAULT_PAGE_INDEX) null else page - 1,
                 nextKey = if (response.isEmpty()) null else page + 1

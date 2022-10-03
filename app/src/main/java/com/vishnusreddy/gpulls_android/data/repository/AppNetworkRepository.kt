@@ -9,18 +9,20 @@ import com.vishnusreddy.gpulls_android.data.api.GitHubAPI
 import com.vishnusreddy.gpulls_android.data.model.GithubPullRequest
 import com.vishnusreddy.gpulls_android.data.model.GithubRepository
 import com.vishnusreddy.gpulls_android.data.model.GithubUser
+import com.vishnusreddy.gpulls_android.utils.PagingUtils.getDefaultPageConfig
 import retrofit2.Response
 
 
 class AppNetworkRepository constructor(private val networkApi: GitHubAPI) {
 
-    val DEFAULT_PAGE_SIZE = 20
-
     suspend fun getUserInfo(userName: String): Response<GithubUser> {
         return networkApi.getUserInfo(userName)
     }
 
-    fun getRepositoriesLiveData(userName: String, pagingConfig: PagingConfig = getDefaultPageConfig()): LiveData<PagingData<GithubRepository>> {
+    fun getRepositoriesLiveData(
+        userName: String,
+        pagingConfig: PagingConfig = getDefaultPageConfig()
+    ): LiveData<PagingData<GithubRepository>> {
         return Pager(
             config = pagingConfig,
             pagingSourceFactory = { GitHubRepoPagingSource(networkApi, userName) }
@@ -34,12 +36,15 @@ class AppNetworkRepository constructor(private val networkApi: GitHubAPI) {
     ): LiveData<PagingData<GithubPullRequest>> {
         return Pager(
             config = pagingConfig,
-            pagingSourceFactory = { GitHubClosedPullRequestsPagingSource(networkApi, userName, repo)}
+            pagingSourceFactory = {
+                GitHubClosedPullRequestsPagingSource(
+                    networkApi,
+                    userName,
+                    repo
+                )
+            }
         ).liveData
     }
 
-    // TODO - Helper Function to be moved out of this class.
-    private fun getDefaultPageConfig(): PagingConfig {
-        return PagingConfig(pageSize = DEFAULT_PAGE_SIZE, enablePlaceholders = false)
-    }
+
 }
