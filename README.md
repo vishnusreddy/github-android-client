@@ -2,7 +2,7 @@
 A minimal GitHub client for Android to view public repositories of a given user/organization and its closed pull requests. 
 
 ## Features
-1. View Pubic Repositories. 
+1. View Public Repositories. 
 2. View Closed Pull Requests. 
 
 ## Implementation Note
